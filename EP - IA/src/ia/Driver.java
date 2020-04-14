@@ -1,19 +1,19 @@
 package ia;
 
 import java.io.*;
+import java.util.*;
 
 public class Driver {
 	
 	/* Printa o resulta de acordo com os inputs */
-	public static void printaResultado(double resultado[]) {
+	public static void printaResultado(List<double[]> resultado) {
 		System.out.println("  Input 1    |    Input 2    |    Esperado    |    Resultado  ");
 		System.out.println("--------------------------------------------------------------");
 		for(int i=0; i < RedeNeural.entradas.size(); i++) {
-			for(int j=0; j < RedeNeural.entradas.get(0).length; j++) {
-				System.out.print("     " + RedeNeural.entradas.get(i)[j] + "     |   ");
-				
-			}
-			System.out.print("  " + RedeNeural.saidasEsperadas[i] + "       |  " + String.format("%.5f", resultado[i]) + "  \n");
+			System.out.println("-----------------------------------------------");
+			for (int j = 0; j < RedeNeural.saidasEsperadas.get(i).length; j++) {
+				System.out.print("  " + RedeNeural.saidasEsperadas.get(i)[j] + "       |  " + String.format("%.5f", resultado.get(i)[j]) + "  \n");
+            }
 		}
 	}
 	
@@ -21,8 +21,15 @@ public class Driver {
 		RedeNeural redeNeural = new RedeNeural();//Cria nova rede neural
 		
 		redeNeural.inicializaVariaveis();//Inicializa taxa de Aprendizado, numero de epocas, inputs e entradas
+		int qtdSaida;
+		if (RedeNeural.entradas.get(0).length > 4) {
+			qtdSaida = 7;
+		} else {
+			qtdSaida = 1;
+		}
+
 		//Inicializa os neuronios e cada camada da rede
-		redeNeural.inicializaNeuronios(RedeNeural.entradas.get(0).length, RedeNeural.entradas.get(0).length, 1);
+		redeNeural.inicializaNeuronios(RedeNeural.entradas.get(0).length, RedeNeural.entradas.get(0).length, qtdSaida);
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		boolean flag = true;
@@ -35,15 +42,24 @@ public class Driver {
 				switch(comando) {
 				
 				case "rodar":
-					double[] resultado = new double[] {0,0,0,0};
+					ArrayList<double[]> resultado = new ArrayList<>();
+
 					//Para cada Array de input
 					for(int i=0; i < RedeNeural.entradas.size(); i++) {
-						//Aplica o fowardprop e captura a saida de cada input
-						resultado[i] = redeNeural.forwardprop(RedeNeural.entradas.get(i))
-									   .getNeuronios()[RedeNeural.inputNeuronio + RedeNeural.hiddenNeuronio]
-									   .getOutput();
+						Neuronio[] neuronios = redeNeural.forwardprop(RedeNeural.entradas.get(i))
+									   .getNeuronios();
+						
+						double[] result = new double[neuronios.length - (RedeNeural.inputNeuronio + RedeNeural.hiddenNeuronio)];
+						
+						for (int j = RedeNeural.inputNeuronio + RedeNeural.hiddenNeuronio; j < neuronios.length; j++) {
+							result[j - (RedeNeural.inputNeuronio + RedeNeural.hiddenNeuronio)] = neuronios[j].getOutput();
+						}
+
+						resultado.add(result);
 					};
+
 					printaResultado(resultado);
+
 					break;
 					
 				case "treinar":
@@ -55,7 +71,7 @@ public class Driver {
 						for(int j=0; j < RedeNeural.entradas.size(); j++) {
 							//Aplica o backpropagation em cada array de input a partir das saidas esperadas
 							System.out.println(redeNeural.forwardprop(RedeNeural.entradas.get(j))
-														 .backpropError(RedeNeural.saidasEsperadas[j]));
+														 .backpropError(RedeNeural.saidasEsperadas.get(j)));
 						}
 					};
 					System.out.println("[Acabou o treino!]");

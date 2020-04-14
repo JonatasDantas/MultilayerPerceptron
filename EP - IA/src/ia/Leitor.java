@@ -19,6 +19,7 @@ import com.opencsv.exceptions.CsvException;
 public class Leitor {
 	
 	private static List<String[]> inputs;//Lista de String[] que vai receber o conteudo do csv
+	private static String tipo;
 	
 	/* O construtor da classe Leitor pergunta qual o csv vai ser lido e abastece inputs com seu conteudo */
 	public Leitor() throws IOException {
@@ -26,7 +27,8 @@ public class Leitor {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		Reader reader;
 		System.out.println("AND, OR, XOR ou caracteres?");
-		String tipo = bf.readLine();
+
+		tipo = bf.readLine();
 		
 		switch(tipo) {
 			case "OR": 
@@ -36,7 +38,7 @@ public class Leitor {
 				reader = Files.newBufferedReader(Paths.get("problemXOR.csv").toAbsolutePath());//Le XOR
 				break;
 			case "AND": 
-				reader = Files.newBufferedReader(Paths.get("problemAND.csv").toAbsolutePath());
+				reader = Files.newBufferedReader(Paths.get("problemAND.csv").toAbsolutePath());//Le AND
 				break;
 			default:
 				reader = Files.newBufferedReader(Paths.get("caracteres-limpo.csv").toAbsolutePath());//caracteres como default
@@ -52,34 +54,69 @@ public class Leitor {
 	    }
 	}
 	
-	/* Método que captura os dados de input e atribui a um ArrayList de double[] que serão usadas como dados de entrada */
+	/* M�todo que captura os dados de input e atribui a um ArrayList de double[] que ser�o usadas como dados de entrada */
 	public ArrayList<double[]> leEntrada(){
 		
 		inputs.get(0)[0] = inputs.get(0)[0].substring(1);//Ajusta BUG na leitura
 		ArrayList<double[]> entradas = new ArrayList<double[]>();
 		
-		/* Para cada String[] em input, transforma em double[], remove o último elemento do array (saida) e adiciona
+		/* Para cada String[] em input, transforma em double[], remove o �ltimo elemento do array (saida) e adiciona
 		   em entradas */
 		for(int i=0; i<inputs.size(); i++) { 
 			String[] adicionado = inputs.get(i);
+			adicionado = ArrayUtils.remove(adicionado, adicionado.length-1);
 			double[] temp = Arrays.stream(adicionado).mapToDouble(Double::parseDouble).toArray();//String[] to double[]
-			temp = ArrayUtils.remove(temp, temp.length-1);//Remove o último elemento do array (seria a saida esperada)
 			entradas.add(temp);
 		}
 		
 		return entradas;
 	}
 	
-	/* Método captura o último elemento do String[] de cada elemento em input e atribui a 
+	/* M�todo captura o �ltimo elemento do String[] de cada elemento em input e atribui a 
 	   saidasEspaeradas (double[]) */
-	public double[] leSaidaEsperada() {
-		
-		double[] saidasEsperadas = new double[inputs.size()];//Inicializa o array com o tamanho da lista inputs
+	public ArrayList<double[]> leSaidaEsperada() {
+		ArrayList<double[]> saidasEsperadas = new ArrayList<double[]>();
+		boolean caracteres = (!tipo.equals("AND") && !tipo.equals("OR") && !tipo.equals("XOR"));
+		 
 
-		/* Para cada elemento em inputs, captura o ultimo elemento do String array em questão e atribui 
-		   a saidasEsperadas */
-		for(int i=0; i<inputs.size(); i++) {
-			saidasEsperadas[i] = Double.valueOf(inputs.get(i)[inputs.get(i).length-1]);
+		if (!caracteres) {
+            System.out.println("Entrou n�o caracteres");
+            for(int i=0; i<inputs.size(); i++) {
+                    double[] saida = {Double.valueOf(inputs.get(i)[inputs.get(i).length-1])};
+                    saidasEsperadas.add(saida);
+            }
+		} else {
+            System.out.println("Entrou caracteres");
+            for(int i=0; i<inputs.size(); i++) {
+                    String saidaLetra = inputs.get(i)[inputs.get(i).length-1];
+                    double[] saida = {0, 0, 0, 0, 0, 0, 0};
+
+                    switch (saidaLetra) {
+                            case "A":
+                                    saida[0] = 1;
+                                    break;
+                            case "B":
+                                    saida[1] = 1;
+                                    break;
+                            case "C":
+                                    saida[2] = 1;
+                                    break;
+                            case "D":
+                                    saida[3] = 1;
+                                    break;
+                            case "E":
+                                    saida[4] = 1;
+                                    break;
+                            case "J":
+                                    saida[5] = 1;
+                                    break;
+                            case "K":
+                                    saida[6] = 1;
+                                    break;
+                    }
+
+                    saidasEsperadas.add(saida);
+            }
 		}
 		
 		return saidasEsperadas;

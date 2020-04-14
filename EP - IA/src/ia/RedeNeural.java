@@ -14,7 +14,7 @@ public class RedeNeural {
 	private static double[] biasOutput;
 	private static Neuronio[] neuronios;
 	public int epocas;
-	public static double[] saidasEsperadas;
+	public static ArrayList<double[]> saidasEsperadas;
 	public static ArrayList<double[]> entradas;//Entradas lidas pelo Leitor
 	
 	/* Inicializa a taxa de aprendizado, o numero de epocas, as entradas e as saidas esperadas */
@@ -112,12 +112,14 @@ public class RedeNeural {
 		return this;
 	}
 	
-	public RedeNeural backpropError (double valEsperado) {
+	public RedeNeural backpropError (double[] valEsperado) {
 		// Passo 6 - backpropagation camada de saída.
 		//Para cada neuronio da camada de saida
+		
+		int contador = 1;
 		for (int i = neuronios.length -1; i >= inputNeuronio + hiddenNeuronio; i--) {
 			//Seta o erro -> Derivada de (Valor esperado - Valor obtido)
-			neuronios[i].setError((valEsperado - neuronios[i].getOutput()) * neuronios[i].calculaDerivada());
+			neuronios[i].setError((valEsperado[valEsperado.length - contador] - neuronios[i].getOutput()) * neuronios[i].calculaDerivada());
 			//Nova entrada -> Entrada atual + taxa de aprendizado multiplicado pelo seu erro
 			neuronios[i].setEntrada(neuronios[i].getEntrada() + taxaAprendizado * neuronios[i].getError());
 			
@@ -130,6 +132,8 @@ public class RedeNeural {
 			//Atualiza bias -> Bias atual (Camada de saida) + taxa de aprendizada * erro obtido
 			biasOutput[i - (inputNeuronio + hiddenNeuronio)] = biasOutput[i - (inputNeuronio + hiddenNeuronio)] + 
 															   (taxaAprendizado * neuronios[i].getError());
+			
+			contador++;
 		}
 
 		// Passo 7 - backpropagation camada escondida.
