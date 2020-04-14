@@ -30,16 +30,16 @@ public class Leitor {
 		
 		switch(tipo) {
 			case "OR": 
-				reader = Files.newBufferedReader(Paths.get("problemOR.csv").toAbsolutePath());//Le OR
+				reader = Files.newBufferedReader(Paths.get("inputs/problemOR.csv").toAbsolutePath());//Le OR
 				break;
 			case "XOR": 
-				reader = Files.newBufferedReader(Paths.get("problemXOR.csv").toAbsolutePath());//Le XOR
+				reader = Files.newBufferedReader(Paths.get("inputs/problemXOR.csv").toAbsolutePath());//Le XOR
 				break;
 			case "AND": 
-				reader = Files.newBufferedReader(Paths.get("problemAND.csv").toAbsolutePath());
+				reader = Files.newBufferedReader(Paths.get("inputs/problemAND.csv").toAbsolutePath());
 				break;
 			default:
-				reader = Files.newBufferedReader(Paths.get("caracteres-limpo.csv").toAbsolutePath());//caracteres como default
+				reader = Files.newBufferedReader(Paths.get("inputs/caracteres-limpo.csv").toAbsolutePath());//caracteres como default
 		}
 		
 	    CSVReader csvReader = new CSVReaderBuilder(reader).build();
