@@ -5,27 +5,64 @@ import java.util.*;
 
 public class Driver {
 	
+	static String[] caract = {"A", "B", "C", "D", "E", "J", "K"};
+	
 	/* Printa o resulta de acordo com os inputs */
-	public static void printaResultado(List<double[]> resultado) {
+	public static void printaResultado(ArrayList<double[]> resultado) {
 		System.out.println("  Input 1    |    Input 2    |    Esperado    |    Resultado  ");
 		System.out.println("--------------------------------------------------------------");
 		for(int i=0; i < RedeNeural.entradas.size(); i++) {
-			System.out.println("-----------------------------------------------");
+			for(int j=0; j < RedeNeural.entradas.get(0).length; j++) {
+				System.out.print("     " + RedeNeural.entradas.get(i)[j] + "     |   ");
+				
+			}
 			for (int j = 0; j < RedeNeural.saidasEsperadas.get(i).length; j++) {
-				System.out.print("  " + RedeNeural.saidasEsperadas.get(i)[j] + "       |  " + String.format("%.5f", resultado.get(i)[j]) + "  \n");
-            }
+				System.out.print("  " + RedeNeural.saidasEsperadas.get(i)[j] + "       |  " + 
+				String.format("%.5f", resultado.get(i)[j]) + "  \n");
+			}
 		}
 	}
 	
+	/* Printa o resulta de acordo com os inputs para caracteres */
+	public static void printaCaractere(List<double[]> resultado) {
+		
+		System.out.println(" Input    |    Resultado  ");
+		System.out.println("---------------------------");
+		for(int i=0; i < RedeNeural.entradas.size(); i++) {
+			System.out.println("-------------------------------------");
+			for (int j = 0; j < RedeNeural.saidasEsperadas.get(i).length; j++) {
+				System.out.print("  " + RedeNeural.saidasEsperadas.get(i)[j] + " - " + caract[j] + "       |  " + 
+				String.format("%.5f", resultado.get(i)[j]) + "  \n");
+				
+			}
+			System.out.println("\n Caractere de saida: " + capturaLetra(resultado.get(i)) + "\n");
+		}
+		
+	}
+	
+	/*Captura o resultado mais próximo do esperado (1) e retorna seu caractere */ 
+	public static String capturaLetra(double[] array) {
+		double max = 0.0;//aqui a variável max recebe o valor do primeiro item do array
+		String letra ="";
+		for (int i = 0; i < array.length; i++) { 
+			if (array[i] > max){   
+				max = array[i];
+				letra = caract[i];
+	         }
+	     }  
+	   return letra;
+	}
+		
+		
 	public static void main(String[] args) throws IOException {
 		RedeNeural redeNeural = new RedeNeural();//Cria nova rede neural
 		
 		redeNeural.inicializaVariaveis();//Inicializa taxa de Aprendizado, numero de epocas, inputs e entradas
 		int qtdSaida;
 		if (RedeNeural.entradas.get(0).length > 4) {
-			qtdSaida = 7;
+			qtdSaida = 7;//1 neuronio para cada caractere
 		} else {
-			qtdSaida = 1;
+			qtdSaida = 1;//AND, OR e XOR
 		}
 
 		//Inicializa os neuronios e cada camada da rede
@@ -46,6 +83,7 @@ public class Driver {
 
 					//Para cada Array de input
 					for(int i=0; i < RedeNeural.entradas.size(); i++) {
+						//Aplica o fowardprop e captura a saida de cada input
 						Neuronio[] neuronios = redeNeural.forwardprop(RedeNeural.entradas.get(i))
 									   .getNeuronios();
 						
@@ -57,8 +95,9 @@ public class Driver {
 
 						resultado.add(result);
 					};
-
-					printaResultado(resultado);
+					
+					if(RedeNeural.entradas.size() > 4) printaCaractere(resultado);
+					else printaResultado(resultado);
 
 					break;
 					
