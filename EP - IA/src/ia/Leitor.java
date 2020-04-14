@@ -25,7 +25,7 @@ public class Leitor {
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		Reader reader;
-		System.out.println("AND, OR ou XOR?");
+		System.out.println("AND, OR, XOR ou caracteres?");
 		String tipo = bf.readLine();
 		
 		switch(tipo) {
