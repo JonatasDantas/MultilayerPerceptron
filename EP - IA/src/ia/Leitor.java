@@ -35,8 +35,11 @@ public class Leitor {
 			case "XOR": 
 				reader = Files.newBufferedReader(Paths.get("problemXOR.csv").toAbsolutePath());//Le XOR
 				break;
+			case "AND": 
+				reader = Files.newBufferedReader(Paths.get("problemAND.csv").toAbsolutePath());
+				break;
 			default:
-				reader = Files.newBufferedReader(Paths.get("problemAND.csv").toAbsolutePath());//Le AND (default)
+				reader = Files.newBufferedReader(Paths.get("caracteres-limpo.csv").toAbsolutePath());//caracteres como default
 		}
 		
 	    CSVReader csvReader = new CSVReaderBuilder(reader).build();
@@ -49,31 +52,31 @@ public class Leitor {
 	    }
 	}
 	
-	/* Método que captura os dados de input e atribui a um ArrayList de double[] que serão usadas como dados de entrada */
+	/* MÃ©todo que captura os dados de input e atribui a um ArrayList de double[] que serÃ£o usadas como dados de entrada */
 	public ArrayList<double[]> leEntrada(){
 		
 		inputs.get(0)[0] = inputs.get(0)[0].substring(1);//Ajusta BUG na leitura
 		ArrayList<double[]> entradas = new ArrayList<double[]>();
 		
-		/* Para cada String[] em input, transforma em double[], remove o último elemento do array (saida) e adiciona
+		/* Para cada String[] em input, transforma em double[], remove o Ãºltimo elemento do array (saida) e adiciona
 		   em entradas */
 		for(int i=0; i<inputs.size(); i++) { 
 			String[] adicionado = inputs.get(i);
 			double[] temp = Arrays.stream(adicionado).mapToDouble(Double::parseDouble).toArray();//String[] to double[]
-			temp = ArrayUtils.remove(temp, temp.length-1);//Remove o último elemento do array (seria a saida esperada)
+			temp = ArrayUtils.remove(temp, temp.length-1);//Remove o Ãºltimo elemento do array (seria a saida esperada)
 			entradas.add(temp);
 		}
 		
 		return entradas;
 	}
 	
-	/* Método captura o último elemento do String[] de cada elemento em input e atribui a 
+	/* MÃ©todo captura o Ãºltimo elemento do String[] de cada elemento em input e atribui a 
 	   saidasEspaeradas (double[]) */
 	public double[] leSaidaEsperada() {
 		
 		double[] saidasEsperadas = new double[inputs.size()];//Inicializa o array com o tamanho da lista inputs
 
-		/* Para cada elemento em inputs, captura o ultimo elemento do String array em questão e atribui 
+		/* Para cada elemento em inputs, captura o ultimo elemento do String array em questÃ£o e atribui 
 		   a saidasEsperadas */
 		for(int i=0; i<inputs.size(); i++) {
 			saidasEsperadas[i] = Double.valueOf(inputs.get(i)[inputs.get(i).length-1]);
