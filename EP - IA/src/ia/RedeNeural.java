@@ -22,7 +22,7 @@ public class RedeNeural {
 		Leitor leitor = new Leitor();
 
 		taxaAprendizado = getRandomNoIntervalo(0.1, 1.0);//Numero aleatorio
-		epocas = 1000;
+		epocas = 2000;
 		saidasEsperadas = leitor.leSaidaEsperada();
 		entradas = leitor.leEntrada();
 	}
