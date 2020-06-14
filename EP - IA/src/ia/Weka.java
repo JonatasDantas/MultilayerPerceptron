@@ -10,7 +10,7 @@ import weka.core.Instances;
 
 public class Weka {
 	
-	public static CSVLoader loader(String filepath) throws IOException {
+	public static CSVLoader loader(String filepath) throws IOException {// carrega os dados que serão utilizados para treinamento
 		
 		CSVLoader trainloader = new CSVLoader();
 		
@@ -20,7 +20,7 @@ public class Weka {
 		return trainloader;
 	}
 	
-	public static Instances instancia (CSVLoader loader) throws IOException {
+	public static Instances instancia (CSVLoader loader) throws IOException {//
 		
 		Instances train = loader.getDataSet();
 		train.setClassIndex(train.numAttributes()-1);
@@ -40,13 +40,13 @@ public class Weka {
 		
 		/*
 		for(int i=0; i<epocas; i++) {
-				
+			//printa 	
 			mlp.initializeClassifier(buildClassifier);
-			System.out.println(mlp.getValidationThreshold());
+			System.out.println(mlp.getValidationThreshold());//The threshold used for validation testing
 			mlp.next();
 		}
 		*/
-		mlp.buildClassifier(buildClassifier);
+		mlp.buildClassifier(buildClassifier);//train a neural network for the training data provided
 
 		return mlp;
 	}
