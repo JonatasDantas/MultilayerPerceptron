@@ -101,12 +101,12 @@ public class Weka {
 		try {
 			String arquivoTreino = Utils.getOption('t', args);
 			if(arquivoTreino.length() == 0) {
-				System.out.println("Por favor, informe um caminho para o arquivo de treino com \"-t <caminho_para_arquivo.csv>");
+				System.out.println("Por favor, informe um caminho para o arquivo de treino com \"-t <caminho_para_arquivo.csv>\"");
 				return;
 			}
 			String arquivoExecucao = Utils.getOption('r', args);
 			if(arquivoTreino.length() == 0) {
-				System.out.println("Por favor, informe um caminho para o arquivo de execução com \"-r <caminho_para_arquivo.cvs>");
+				System.out.println("Por favor, informe um caminho para o arquivo de execução com \"-r <caminho_para_arquivo.cvs>\"");
 				return;
 			}
 			String outputFolderLocation = Utils.getOption('o', args);
