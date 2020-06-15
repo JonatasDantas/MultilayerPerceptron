@@ -10,11 +10,11 @@ import weka.core.Instances;
 
 public class Weka {
 	
-	public static CSVLoader loader(String filepath) throws IOException {// carrega os dados que serão utilizados para treinamento
+	public static CSVLoader loader(String filepath) throws IOException {// Lê uma fonte que está no formato separado por vírgula
 		
 		CSVLoader trainloader = new CSVLoader();
 		
-		trainloader.setSource(new File(filepath));
+		trainloader.setSource(new File(filepath));//Redefine o objeto Loader e define a origem do conjunto de dados com o objeto File fornecido.
 		trainloader.setNoHeaderRowPresent(true);
 		
 		return trainloader;
@@ -22,8 +22,8 @@ public class Weka {
 	
 	public static Instances instancia (CSVLoader loader) throws IOException {//
 		
-		Instances train = loader.getDataSet();
-		train.setClassIndex(train.numAttributes()-1);
+		Instances train = loader.getDataSet();// Return the full data set
+		train.setClassIndex(train.numAttributes()-1);// torna o ultimo atributo ser a classe
 		
 		return train;
 	}
@@ -51,9 +51,9 @@ public class Weka {
 		return mlp;
 	}
 	
-	public static Evaluation avalia (MultilayerPerceptron mlp, Instances data) throws Exception {
+	public static Evaluation avalia (MultilayerPerceptron mlp, Instances data) throws Exception {//classe usada para avaliação do treinamento
 		
-		Evaluation eval = new Evaluation(data);
+		Evaluation eval = new Evaluation(data);//Instância de avaliação criada com a matriz de custos especificada
 	    eval.evaluateModel(mlp, data);
 	    
 	    System.out.println("Taxa de erro: " + eval.errorRate()); //Printing Training Mean root squared Error
