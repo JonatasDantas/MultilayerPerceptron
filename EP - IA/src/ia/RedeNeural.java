@@ -22,7 +22,7 @@ public class RedeNeural {
 		Leitor leitor = new Leitor();
 
 		taxaAprendizado = getRandomNoIntervalo(0.1, 1.0);//Numero aleatorio
-		epocas = 2000;
+		epocas = 100;
 		saidasEsperadas = leitor.leSaidaEsperada();
 		entradas = leitor.leEntrada();
 	}
@@ -91,14 +91,15 @@ public class RedeNeural {
 
 					for (int j = 0; j < inputNeuronio; j++) {
 						//Pondera o output atraves de cada peso e joga no acumulador
-						somaPesos += neuronios[i].getPeso()[j] * neuronios[j].getOutput();
+						somaPesos += neuronios[i].getPeso()[j] * neuronios[j].getOutput();//VALOR ESTRANHO AQUI! neuronios[j].getOutput()
 					}
+					
 					//Aplica a funcao de ativacao com a soma das ponderacoes
 					neuronios[i].aplicaFuncaoAtivacao(somaPesos);
 					break;
 				case O:
 					somaPesos = biasOutput[i - (inputNeuronio + hiddenNeuronio)];//Captura o bias
-
+					
 					for (int j = inputNeuronio; j < (inputNeuronio + hiddenNeuronio); j++) {
 						//Pondera o output atraves de cada peso e joga no acumulador
 						somaPesos += neuronios[i].getPeso()[j - inputNeuronio] * neuronios[j].getOutput();
@@ -132,7 +133,6 @@ public class RedeNeural {
 			//Atualiza bias -> Bias atual (Camada de saida) + taxa de aprendizada * erro obtido
 			biasOutput[i - (inputNeuronio + hiddenNeuronio)] = biasOutput[i - (inputNeuronio + hiddenNeuronio)] + 
 															   (taxaAprendizado * neuronios[i].getError());
-			
 			contador++;
 		}
 

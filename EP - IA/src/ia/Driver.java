@@ -6,6 +6,7 @@ import java.util.*;
 public class Driver {
 	
 	static String[] caract = {"A", "B", "C", "D", "E", "J", "K"};
+	static String[] data = {"g","b"};
 	
 	/* Printa o resulta de acordo com os inputs */
 	public static void printaResultado(ArrayList<double[]> resultado) {
@@ -31,14 +32,15 @@ public class Driver {
 		for(int i=0; i < RedeNeural.entradas.size(); i++) {
 			System.out.println("-------------------------------------");
 			for (int j = 0; j < RedeNeural.saidasEsperadas.get(i).length; j++) {
-				System.out.print("  " + RedeNeural.saidasEsperadas.get(i)[j] + " - " + caract[j] + "       |  " + 
-				String.format("%.5f", resultado.get(i)[j]) + "  \n");
-				
+				if(Leitor.tipo.equals("caracteres"))
+					System.out.print("  " + RedeNeural.saidasEsperadas.get(i)[j] + " - " + caract[j] + "       |  " + String.format("%.5f", resultado.get(i)[j]) + "  \n");
+				else System.out.print("  " + RedeNeural.saidasEsperadas.get(i)[j] + " - " + data[j] + "  |  " + String.format("%.5f", resultado.get(i)[j]) + "  \n");
 			}
 			System.out.println("\n Caractere de saida: " + capturaLetra(resultado.get(i)) + "\n");
 		}
 		
 	}
+	
 	
 	/*Captura o resultado mais próximo do esperado (1) e retorna seu caractere */ 
 	public static String capturaLetra(double[] array) {
@@ -47,11 +49,13 @@ public class Driver {
 		for (int i = 0; i < array.length; i++) { 
 			if (array[i] > max){   
 				max = array[i];
-				letra = caract[i];
+				if(Leitor.tipo.equals("caracteres")) letra = caract[i];
+				else letra = data[i];
 	         }
 	     }  
 	   return letra;
 	}
+	
 		
 		
 	public static void main(String[] args) throws IOException {
@@ -59,11 +63,12 @@ public class Driver {
 		
 		redeNeural.inicializaVariaveis();//Inicializa taxa de Aprendizado, numero de epocas, inputs e entradas
 		int qtdSaida;
-		if (RedeNeural.entradas.get(0).length > 4) {
+		if (Leitor.tipo.equals("caracteres")) {
 			qtdSaida = 7;//1 neuronio para cada caractere
-		} else {
-			qtdSaida = 1;//AND, OR e XOR
-		}
+		} 
+		else if (Leitor.ion) qtdSaida = 2;
+		else qtdSaida = 1;//AND, OR e XOR
+	
 
 		//Inicializa os neuronios e cada camada da rede
 		redeNeural.inicializaNeuronios(RedeNeural.entradas.get(0).length, RedeNeural.entradas.get(0).length, qtdSaida);
@@ -86,11 +91,12 @@ public class Driver {
 						//Aplica o fowardprop e captura a saida de cada input
 						Neuronio[] neuronios = redeNeural.forwardprop(RedeNeural.entradas.get(i))
 									   .getNeuronios();
-						
 						double[] result = new double[neuronios.length - (RedeNeural.inputNeuronio + RedeNeural.hiddenNeuronio)];
+						//System.out.println("Result: "+result.length);
 						
 						for (int j = RedeNeural.inputNeuronio + RedeNeural.hiddenNeuronio; j < neuronios.length; j++) {
 							result[j - (RedeNeural.inputNeuronio + RedeNeural.hiddenNeuronio)] = neuronios[j].getOutput();
+							
 						}
 
 						resultado.add(result);
