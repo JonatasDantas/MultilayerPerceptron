@@ -6,7 +6,9 @@ import java.util.*;
 public class Driver {
 	
 	static String[] caract = {"A", "B", "C", "D", "E", "J", "K"};
-	static String[] data = {"g","b"};
+	static String[] data = {"republican","democrat"};
+//	static int limite;
+//	static int minimo = 0; 
 	
 	/* Printa o resulta de acordo com os inputs */
 	public static void printaResultado(ArrayList<double[]> resultado) {
@@ -66,12 +68,13 @@ public class Driver {
 		if (Leitor.tipo.equals("caracteres")) {
 			qtdSaida = 7;//1 neuronio para cada caractere
 		} 
-		else if (Leitor.ion) qtdSaida = 2;
+		else if (Leitor.dtset) qtdSaida = 2;
 		else qtdSaida = 1;//AND, OR e XOR
 	
 
 		//Inicializa os neuronios e cada camada da rede
 		redeNeural.inicializaNeuronios(RedeNeural.entradas.get(0).length, RedeNeural.entradas.get(0).length, qtdSaida);
+		List<double[]> fixinput = RedeNeural.entradas;
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		boolean flag = true;
@@ -79,13 +82,16 @@ public class Driver {
 		while(flag) {
 			System.out.println("rodar, treinar ou sair?");
 			String comando;
+			
 			try {
 				comando = bf.readLine();
 				switch(comando) {
 				
 				case "rodar":
+					RedeNeural.entradas = fixinput;
+					if(Leitor.dtset) RedeNeural.entradas = RedeNeural.entradas.subList(304, RedeNeural.entradas.size());//Recebe 30% da tabela
+					System.out.println(RedeNeural.entradas.size());
 					ArrayList<double[]> resultado = new ArrayList<>();
-
 					//Para cada Array de input
 					for(int i=0; i < RedeNeural.entradas.size(); i++) {
 						//Aplica o fowardprop e captura a saida de cada input
@@ -108,16 +114,21 @@ public class Driver {
 					break;
 					
 				case "treinar":
+					RedeNeural.entradas = fixinput;
+					if(Leitor.dtset) RedeNeural.entradas = RedeNeural.entradas.subList(0,304);//Recebe 70% da tabela
+					
 					for(int i=0; i < redeNeural.epocas; i++) {
 						System.out.println("[Epoca " + (i+1) +"]");//Epoca comeca em 1
 						//Padrao de print
 						System.out.println("[Tipo Neuronio, peso 1, peso 2, entrada, output]");
 						//Para cada Array de input
+						
 						for(int j=0; j < RedeNeural.entradas.size(); j++) {
 							//Aplica o backpropagation em cada array de input a partir das saidas esperadas
 							System.out.println(redeNeural.forwardprop(RedeNeural.entradas.get(j))
 														 .backpropError(RedeNeural.saidasEsperadas.get(j)));
 						}
+						System.out.println(RedeNeural.entradas.size());
 					};
 					System.out.println("[Acabou o treino!]");
 					break;

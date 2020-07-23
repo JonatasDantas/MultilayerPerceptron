@@ -20,15 +20,16 @@ public class Leitor {
 	
 	private static List<String[]> inputs;//Lista de String[] que vai receber o conteudo do csv
 	public static String tipo;
-	public static boolean ion = false;
+	public static boolean dtset = false;
+	
 	
 	/* O construtor da classe Leitor pergunta qual o csv vai ser lido e abastece inputs com seu conteudo */
 	public Leitor() throws IOException {
-		
+
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		Reader reader;
 		System.out.println("AND, OR, XOR, caracteres ou dataset?");
-
+		//System.out.println("treinar ou testar dataset?");
 		tipo = bf.readLine();
 		
 		switch(tipo) {
@@ -45,8 +46,8 @@ public class Leitor {
 				reader = Files.newBufferedReader(Paths.get("caracteres-limpo.csv").toAbsolutePath());//Le caracteres
 				break;
 			default:
-				reader = Files.newBufferedReader(Paths.get("ionosphere.csv").toAbsolutePath());//Dataset como default
-				ion = true;
+				reader = Files.newBufferedReader(Paths.get("house-votes-84.csv").toAbsolutePath());//Dataset como default
+				dtset = true;
 				break;
 		}
 		
@@ -63,7 +64,7 @@ public class Leitor {
 	/* M�todo que captura os dados de input e atribui a um ArrayList de double[] que ser�o usadas como dados de entrada */
 	public ArrayList<double[]> leEntrada(){
 		
-		if(!ion)inputs.get(0)[0] = inputs.get(0)[0].substring(1);//Ajusta BUG na leitura
+		if(!dtset)inputs.get(0)[0] = inputs.get(0)[0].substring(1);//Ajusta BUG na leitura
 		ArrayList<double[]> entradas = new ArrayList<double[]>();
 		
 		/* Para cada String[] em input, transforma em double[], remove o �ltimo elemento do array (saida) e adiciona
@@ -131,10 +132,10 @@ public class Leitor {
 				double[] saida = {0, 0};
 				
 				switch (saidaLetra) {
-					case "g":
+					case "republican":
 						saida[0] = 1;
 						break;
-					case"b":
+					case"democrat":
 						saida[1] = 1;
 						break;
 				
@@ -146,6 +147,8 @@ public class Leitor {
 		
 		return saidasEsperadas;
 	}
+
+
 	
 }
 

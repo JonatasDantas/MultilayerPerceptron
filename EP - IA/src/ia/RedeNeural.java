@@ -3,6 +3,7 @@ package ia;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class RedeNeural {
 	
@@ -15,14 +16,14 @@ public class RedeNeural {
 	private static Neuronio[] neuronios;
 	public int epocas;
 	public static ArrayList<double[]> saidasEsperadas;
-	public static ArrayList<double[]> entradas;//Entradas lidas pelo Leitor
+	public static List<double[]> entradas;//Entradas lidas pelo Leitor
 	
 	/* Inicializa a taxa de aprendizado, o numero de epocas, as entradas e as saidas esperadas */
 	public void inicializaVariaveis() throws IOException {
 		Leitor leitor = new Leitor();
 
 		taxaAprendizado = getRandomNoIntervalo(0.1, 1.0);//Numero aleatorio
-		epocas = 100;
+		epocas = 2;
 		saidasEsperadas = leitor.leSaidaEsperada();
 		entradas = leitor.leEntrada();
 	}
@@ -91,7 +92,10 @@ public class RedeNeural {
 
 					for (int j = 0; j < inputNeuronio; j++) {
 						//Pondera o output atraves de cada peso e joga no acumulador
+						//System.out.println("Peso: "+neuronios[i].getPeso()[j]);
+						//System.out.println("Output: "+neuronios[j].getOutput());
 						somaPesos += neuronios[i].getPeso()[j] * neuronios[j].getOutput();//VALOR ESTRANHO AQUI! neuronios[j].getOutput()
+						
 					}
 					
 					//Aplica a funcao de ativacao com a soma das ponderacoes
