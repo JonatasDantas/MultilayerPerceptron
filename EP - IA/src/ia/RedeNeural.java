@@ -23,13 +23,16 @@ public class RedeNeural {
 		Leitor leitor = new Leitor();
 
 		taxaAprendizado = getRandomNoIntervalo(0.1, 1.0);//Numero aleatorio
-		epocas = 2;
+		epocas = 1000;
 		saidasEsperadas = leitor.leSaidaEsperada();
 		entradas = leitor.leEntrada();
 	}
 	
 	/* Inicializa os neuronios com a quantidade em cada camada */ 
 	public void inicializaNeuronios(int qtdInput, int qtdHidden, int qtdOutuput) {
+		System.out.println("qtdInput :"+qtdInput);
+		System.out.println("qtdHidden :"+qtdHidden);
+		System.out.println("qtdOutuput :"+qtdOutuput);
 		neuronios = new Neuronio[qtdInput + qtdHidden + qtdOutuput];//Abastece o array de neuronios com as camadas
 		biasHidden = new double[qtdHidden];//Abastece o bias com o numero de neuronios na camada escondida
 		biasOutput = new double[qtdOutuput];//Abastece o bias com o numero de neuronios na camada de saida
@@ -85,20 +88,22 @@ public class RedeNeural {
 		for (int i=0; i<neuronios.length; i++) {
 			switch(neuronios[i].getTiponeuronio()) {
 				case I:
+					//System.out.println("Output: "+input[i]);
 					neuronios[i].setOutput(input[i]);//Seta output do neuronio de entrada
 					break;
 				case H:
 					somaPesos = biasHidden[i - inputNeuronio];//Captura o bias
-
+					//System.out.println("SomaPesos :"+somaPesos);
 					for (int j = 0; j < inputNeuronio; j++) {
 						//Pondera o output atraves de cada peso e joga no acumulador
-						//System.out.println("Peso: "+neuronios[i].getPeso()[j]);
-						//System.out.println("Output: "+neuronios[j].getOutput());
+//						System.out.println("Peso: "+neuronios[i].getPeso()[j]);
+//						System.out.println("Output: "+neuronios[j].getOutput());
+//						
 						somaPesos += neuronios[i].getPeso()[j] * neuronios[j].getOutput();//VALOR ESTRANHO AQUI! neuronios[j].getOutput()
 						
 					}
-					
 					//Aplica a funcao de ativacao com a soma das ponderacoes
+					//System.out.println("SomaPesos :"+somaPesos);
 					neuronios[i].aplicaFuncaoAtivacao(somaPesos);
 					break;
 				case O:
@@ -106,6 +111,9 @@ public class RedeNeural {
 					
 					for (int j = inputNeuronio; j < (inputNeuronio + hiddenNeuronio); j++) {
 						//Pondera o output atraves de cada peso e joga no acumulador
+//						System.out.println("Peso: "+neuronios[i].getPeso()[j - inputNeuronio]);
+//						
+//						System.out.println("SomaPesos :"+somaPesos);
 						somaPesos += neuronios[i].getPeso()[j - inputNeuronio] * neuronios[j].getOutput();
 					}
 					//Aplica a funcao de ativacao com a soma das ponderacoes

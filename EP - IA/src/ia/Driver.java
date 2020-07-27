@@ -73,7 +73,8 @@ public class Driver {
 	
 
 		//Inicializa os neuronios e cada camada da rede
-		redeNeural.inicializaNeuronios(RedeNeural.entradas.get(0).length, RedeNeural.entradas.get(0).length, qtdSaida);
+		redeNeural.inicializaNeuronios(RedeNeural.entradas.get(0).length, RedeNeural.entradas.get(0).length/2, qtdSaida);
+		
 		List<double[]> fixinput = RedeNeural.entradas;
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -90,7 +91,6 @@ public class Driver {
 				case "rodar":
 					RedeNeural.entradas = fixinput;
 					if(Leitor.dtset) RedeNeural.entradas = RedeNeural.entradas.subList(304, RedeNeural.entradas.size());//Recebe 30% da tabela
-					System.out.println(RedeNeural.entradas.size());
 					ArrayList<double[]> resultado = new ArrayList<>();
 					//Para cada Array de input
 					for(int i=0; i < RedeNeural.entradas.size(); i++) {
@@ -128,7 +128,6 @@ public class Driver {
 							System.out.println(redeNeural.forwardprop(RedeNeural.entradas.get(j))
 														 .backpropError(RedeNeural.saidasEsperadas.get(j)));
 						}
-						System.out.println(RedeNeural.entradas.size());
 					};
 					System.out.println("[Acabou o treino!]");
 					break;
